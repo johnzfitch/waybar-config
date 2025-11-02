@@ -6,6 +6,7 @@
 CACHE_FILE="$HOME/.cache/waybar-feed-cache.json"
 STATE_FILE="$HOME/.cache/waybar-feed-state"
 CACHE_DURATION=300  # 5 minutes
+BAR_HEIGHT=50  # Height of waybar in pixels
 
 # Get auth token from environment variable or use default
 AUTH_TOKEN="${FRESHRSS_AUTH_TOKEN:-}"
@@ -55,6 +56,17 @@ update_index() {
     echo "$next" > "$STATE_FILE"
 }
 
+# Check if cursor is hovering over waybar
+is_cursor_over_bar() {
+    local pos=$(hyprctl cursorpos 2>/dev/null)
+    if [[ -n "$pos" ]]; then
+        local y=$(echo "$pos" | cut -d',' -f2 | tr -d ' ')
+        [[ "$y" -lt "$BAR_HEIGHT" ]]
+    else
+        return 1
+    fi
+}
+
 # Main logic
 main() {
     # Ensure cache directory exists
@@ -75,27 +87,41 @@ main() {
     # Parse feed and get headlines
     local current_index=$(get_current_index)
 
-    # Extract items using jq - use pipe instead of brackets for cleaner look
-    local item=$(jq -r --arg idx "$current_index" '
-        .items
-        | map(select(.title != null and .title != ""))
-        | if length > 0 then
-            .[(($idx | tonumber) % length)]
-            | (.origin.title // "Feed") + " | " + .title
-          else
-            "⟳ No headlines available"
-          end
-    ' "$CACHE_FILE" 2>/dev/null)
-
     # Get total count for rotation
     local total=$(jq -r '.items | map(select(.title != null and .title != "")) | length' "$CACHE_FILE" 2>/dev/null)
 
-    if [[ -n "$item" && "$total" -gt 0 ]]; then
+    if [[ "$total" -gt 0 ]]; then
         # Update index for next run
         update_index "$total"
 
+        # Extract and format headline using jq to properly escape special characters
+        # Use -c for compact single-line JSON output
+        local json_output=$(jq -c --arg idx "$current_index" -n '{
+            text: (
+                input.items
+                | map(select(.title != null and .title != ""))
+                | if length > 0 then
+                    .[(($idx | tonumber) % length)]
+                    | (.origin.title // "Feed") + " | " + .title
+                  else
+                    "⟳ No headlines available"
+                  end
+            ),
+            class: "ticker",
+            tooltip: "Click to view full feed"
+        }' "$CACHE_FILE" 2>/dev/null)
+
         # Output in waybar format
-        echo "{\"text\": \"$item\", \"class\": \"ticker\", \"tooltip\": \"Click to view full feed\"}"
+        echo "$json_output"
+
+        # Check if cursor is hovering over bar
+        if is_cursor_over_bar; then
+            # Enter hover loop - keep script alive while cursor is over bar
+            # This prevents waybar from rotating to next article
+            while is_cursor_over_bar; do
+                sleep 1
+            done
+        fi
     else
         echo '{"text": "⟳ Feed temporarily offline", "class": "error"}'
     fi

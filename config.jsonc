@@ -6,7 +6,7 @@
     "layer": "top",
     "position": "top",
     "spacing": 0,
-    "height": 30,
+    "height": 50,
     "modules-left": ["custom/omarchy", "hyprland/workspaces"],
     "modules-center": ["custom/feed-ticker", "custom/update", "custom/screenrecording-indicator"],
     "modules-right": [
@@ -151,7 +151,7 @@
       "return-type": "json"
     },
     "tray": {
-      "icon-size": 12,
+      "icon-size": 14,
       "spacing": 17
     }
   }

@@ -47,4 +47,18 @@ To get your FreshRSS auth token:
 
 ## Feed Ticker
 
-The feed ticker displays headlines from your FreshRSS reading list and rotates through them every 5 seconds. Click to open the main feed page.
+The feed ticker displays headlines from your FreshRSS reading list and rotates through them every 5 seconds.
+
+### Hover-Pause Feature
+
+The ticker automatically pauses rotation when you hover your cursor over the waybar (top 50 pixels of the screen). This lets you read headlines without them rotating away. The ticker resumes normal rotation when you move your cursor away from the bar.
+
+**How it works:**
+- Uses `hyprctl cursorpos` to detect cursor position
+- Pauses rotation when Y-coordinate < 50 pixels
+- No background daemons - pause detection runs within the existing 5-second waybar interval
+
+### Controls
+
+- **Click**: Open article (currently opens InternetUniverse.org)
+- **Hover over bar**: Pause rotation on current headline
