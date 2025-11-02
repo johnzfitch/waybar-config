@@ -8,7 +8,7 @@
   border-radius: 0;
   min-height: 0;
   font-family: 'Hack Nerd Font';
-  font-size: 14px;
+  font-size: 16px;
 
   /* Better vertical centering */
   padding-top: 0px;
@@ -88,16 +88,20 @@
 
 #custom-feed-ticker {
   margin: 0 12px;
-  font-size: 14px;
+  font-size: 16px;
 
   /* Vertical centering */
   padding-top: 2px;
   padding-bottom: 2px;
 }
 
+#custom-feed-ticker:hover {
+  text-decoration: underline;
+}
+
 #clock {
   margin-right: 20px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
 
   /* Vertical centering */

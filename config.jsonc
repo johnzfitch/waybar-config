@@ -58,7 +58,7 @@
       "exec": "~/.config/waybar/feed-ticker.sh",
       "return-type": "json",
       "interval": 5,
-      "on-click": "xdg-open https://internetuniverse.org",
+      "on-click": "~/.config/waybar/feed-ticker-open.sh",
       "format": "{}",
       "max-length": 150
     },
@@ -151,7 +151,7 @@
       "return-type": "json"
     },
     "tray": {
-      "icon-size": 14,
+      "icon-size": 16,
       "spacing": 17
     }
   }

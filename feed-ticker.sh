@@ -5,6 +5,7 @@
 
 CACHE_FILE="$HOME/.cache/waybar-feed-cache.json"
 STATE_FILE="$HOME/.cache/waybar-feed-state"
+URL_FILE="$HOME/.cache/waybar-feed-current-url"
 CACHE_DURATION=300  # 5 minutes
 BAR_HEIGHT=50  # Height of waybar in pixels
 
@@ -94,25 +95,49 @@ main() {
         # Update index for next run
         update_index "$total"
 
-        # Extract and format headline using jq to properly escape special characters
-        # Use -c for compact single-line JSON output
-        local json_output=$(jq -c --arg idx "$current_index" -n '{
-            text: (
-                input.items
-                | map(select(.title != null and .title != ""))
-                | if length > 0 then
-                    .[(($idx | tonumber) % length)]
-                    | (.origin.title // "Feed") + " | " + .title
-                  else
-                    "⟳ No headlines available"
-                  end
-            ),
-            class: "ticker",
-            tooltip: "Click to view full feed"
-        }' "$CACHE_FILE" 2>/dev/null)
+        # Extract headline and URL
+        local text=$(jq -r --arg idx "$current_index" '
+            .items
+            | map(select(.title != null and .title != ""))
+            | if length > 0 then
+                .[(($idx | tonumber) % length)]
+                | (.origin.title // "Feed") + " | " + .title
+              else
+                "⟳ No headlines available"
+              end
+        ' "$CACHE_FILE" 2>/dev/null)
 
-        # Output in waybar format
-        echo "$json_output"
+        # Extract URL: HN -> comments, others -> article
+        local url=$(jq -r --arg idx "$current_index" '
+            .items
+            | map(select(.title != null and .title != ""))
+            | if length > 0 then
+                .[(($idx | tonumber) % length)]
+                | . as $item
+                | if (.origin.title // "") | contains("Hacker News") then
+                    # For HN, extract comments URL from summary
+                    ($item.summary.content // "" |
+                     if test("https://news\\.ycombinator\\.com/item\\?id=[0-9]+") then
+                         (match("https://news\\.ycombinator\\.com/item\\?id=[0-9]+") | .string)
+                     else
+                         ($item.alternate[0].href // "")
+                     end)
+                  else
+                    # For other feeds, use direct article link
+                    (.alternate[0].href // .canonical[0].href // "")
+                  end
+              else
+                ""
+              end
+        ' "$CACHE_FILE" 2>/dev/null)
+
+        # Store the URL for the click handler
+        if [[ -n "$url" ]]; then
+            echo "$url" > "$URL_FILE"
+        fi
+
+        # Output in waybar format (no tooltip)
+        echo "{\"text\":\"$text\",\"class\":\"ticker\"}" | jq -c '.'
 
         # Check if cursor is hovering over bar
         if is_cursor_over_bar; then

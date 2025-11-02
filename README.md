@@ -60,5 +60,9 @@ The ticker automatically pauses rotation when you hover your cursor over the way
 
 ### Controls
 
-- **Click**: Open article (currently opens InternetUniverse.org)
+- **Click**: Open article link
+  - Hacker News articles → Opens HN comments page
+  - All other feeds → Opens direct article link
 - **Hover over bar**: Pause rotation on current headline
+  - Text underlines on hover for visual feedback
+  - No tooltip popup
