@@ -1,0 +1,13 @@
+# Backup files
+*.backup
+*.backup*
+*~
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+
+# Cache files (not part of config)
+.cache/

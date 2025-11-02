@@ -1,0 +1,106 @@
+@import "../omarchy/current/theme/waybar.css";
+
+* {
+  background-color: @background;
+  color: @foreground;
+
+  border: none;
+  border-radius: 0;
+  min-height: 0;
+  font-family: 'Hack Nerd Font';
+  font-size: 14.5px;
+
+  /* Better vertical centering */
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+.modules-left {
+  margin-left: 8px;
+}
+
+.modules-right {
+  margin-right: 8px;
+}
+
+#workspaces button {
+  all: initial;
+  padding: 0 6px;
+  margin: 0 1.5px;
+  min-width: 25px;
+}
+
+#workspaces button.empty {
+  opacity: 0.5;
+}
+
+#cpu,
+#battery,
+#pulseaudio,
+#custom-omarchy,
+#custom-screenrecording-indicator,
+#custom-update {
+  min-width: 12px;
+  margin: 0 7.5px;
+}
+
+#tray {
+  margin-right: 16px;
+}
+
+#bluetooth {
+  margin-right: 17px;
+}
+
+#network {
+  margin-right: 13px;
+}
+
+#custom-expand-icon {
+  margin-right: 20px;
+}
+
+#tooltip {
+  padding: 2px;
+}
+
+#custom-update {
+  font-size: 10px;
+}
+
+#clock {
+  margin-left: 8.75px;
+}
+
+.hidden {
+  opacity: 0;
+}
+
+#custom-screenrecording-indicator {
+  min-width: 12px;
+  margin-left: 8.75px;
+  font-size: 10px;
+}
+
+#custom-screenrecording-indicator.active {
+  color: #a55555;
+}
+
+#custom-feed-ticker {
+  margin: 0 12px;
+  font-size: 13.5px;
+
+  /* Vertical centering */
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+#clock {
+  margin-right: 20px;
+  font-size: 13.5px;
+  font-weight: 600;
+
+  /* Vertical centering */
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
