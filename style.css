@@ -11,19 +11,29 @@
   font-size: 16px;
 }
 
-.modules-left {
-  margin-left: 8px;
+box.modules-left {
+  padding-left: 20px;
+  padding-right: 40px;
 }
 
-.modules-right {
-  margin-right: 8px;
+box.modules-left > * {
+  margin: 0 12px;
+}
+
+box.modules-right {
+  padding-left: 40px;
+  padding-right: 20px;
+}
+
+box.modules-right > * {
+  margin: 0 12px;
 }
 
 #workspaces button {
   all: initial;
-  padding: 0 6px;
-  margin: 0 1.5px;
-  min-width: 9px;
+  padding: 0 8px;
+  margin: 0 6px;
+  min-width: 12px;
 }
 
 #workspaces button.empty {
@@ -31,29 +41,71 @@
 }
 
 #cpu,
-#battery,
 #pulseaudio,
-#custom-omarchy,
 #custom-screenrecording-indicator,
 #custom-update {
   min-width: 12px;
-  margin: 0 7.5px;
+  margin: 0 14px;
+}
+
+#custom-omarchy {
+  min-width: 12px;
+  margin: 0 14px;
+}
+
+#battery {
+  min-width: 12px;
+  margin: 0 14px;
 }
 
 #tray {
-  margin-right: 16px;
+  margin: 0 14px;
 }
 
 #bluetooth {
-  margin-right: 17px;
+  margin: 0 14px;
 }
 
 #network {
-  margin-right: 13px;
+  margin: 0 14px;
 }
 
 #custom-expand-icon {
-  margin-right: 18px;
+  margin: 0 14px;
+}
+
+#custom-mullvad {
+  min-width: 12px;
+  margin: 0 12px;
+}
+
+#custom-mullvad.connected {
+  color: #a6e3a1;
+}
+
+#custom-mullvad.disconnected {
+  color: #f38ba8;
+}
+
+#custom-mullvad.connecting {
+  color: #fab387;
+}
+
+#custom-stealth-proxy {
+  min-width: 12px;
+  margin: 0 12px;
+}
+
+#custom-stealth-proxy.proxy-on {
+  color: #a6e3a1;
+}
+
+#custom-stealth-proxy.proxy-off {
+  color: #6c7086;
+}
+
+#custom-stealth-proxy.proxy-audit {
+  color: #fab387;
 }
 
 tooltip {

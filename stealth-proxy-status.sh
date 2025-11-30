@@ -29,14 +29,14 @@ get_status() {
     if [ "$running" = true ]; then
         if [ "$mode" = "unconcentrated" ]; then
             # Running in audit mode - amber/orange
-            echo "{\"text\": \"󱡓\", \"tooltip\": \"Stealth Proxy: ON ($mode_text)\\nLeft-click: Stop\\nRight-click: Switch to FILTER\", \"class\": \"proxy-audit\"}"
+            echo "{\"text\": \"󰛐\", \"tooltip\": \"Stealth Proxy: ON ($mode_text)\\nLeft-click: Stop\\nRight-click: Switch to FILTER\", \"class\": \"proxy-audit\"}"
         else
             # Running in filter mode - green
-            echo "{\"text\": \"󱡓\", \"tooltip\": \"Stealth Proxy: ON ($mode_text)\\nLeft-click: Stop\\nRight-click: Switch to AUDIT\", \"class\": \"proxy-on\"}"
+            echo "{\"text\": \"󰛐\", \"tooltip\": \"Stealth Proxy: ON ($mode_text)\\nLeft-click: Stop\\nRight-click: Switch to AUDIT\", \"class\": \"proxy-on\"}"
         fi
     else
         # Proxy off - dimmed
-        echo "{\"text\": \"󱡒\", \"tooltip\": \"Stealth Proxy: OFF\\nLeft-click: Start\\nRight-click: Toggle mode ($mode_text)\", \"class\": \"proxy-off\"}"
+        echo "{\"text\": \"󰛑\", \"tooltip\": \"Stealth Proxy: OFF\\nLeft-click: Start\\nRight-click: Toggle mode ($mode_text)\", \"class\": \"proxy-off\"}"
     fi
 }
 

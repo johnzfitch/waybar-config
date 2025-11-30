@@ -58,43 +58,62 @@ if [[ -z "$response" ]]; then
     exit 0
 fi
 
-# Count available headlines (FreshRSS returns newest first)
-count=$(echo "$response" | jq '[.items[] | select(.title != null and .title != "")] | length' 2>/dev/null)
-count=${count:-0}
+# Exponential decay based on actual timestamps
+# Half-life of 3 hours: items from 3h ago have 50% weight, 6h ago have 25%, etc.
+HALF_LIFE_HOURS=3
 
-if [[ "$count" -eq 0 ]]; then
+# Generate random float 0-1 using /dev/urandom for true randomness
+RAND_FLOAT=$(od -An -N4 -tu4 /dev/urandom | tr -d ' ' | awk '{printf "%.10f", $1 / 4294967295}')
+
+# Select headline using timestamp-weighted random selection
+selected=$(echo "$response" | jq -r --arg half_life "$HALF_LIFE_HOURS" --arg rand "$RAND_FLOAT" '
+  def exp_decay($age_hours; $half_life):
+    ((-0.693147 * $age_hours) / $half_life) | exp;
+
+  now as $now |
+  [.items[] | select(.title != null and .title != "")] |
+  if length == 0 then null
+  else
+    # Calculate weights based on actual age
+    map({
+      title: ((.origin.title // "Feed") + " | " + .title),
+      url: (if (.origin.title // "") | contains("Hacker News") then
+              (.summary.content // "" |
+               if test("https://news\\.ycombinator\\.com/item\\?id=[0-9]+") then
+                 (match("https://news\\.ycombinator\\.com/item\\?id=[0-9]+") | .string)
+               else (.alternate[0].href // "") end)
+            else (.alternate[0].href // .canonical[0].href // "") end),
+      age_hours: (($now - (.published | tonumber)) / 3600),
+      weight: exp_decay((($now - (.published | tonumber)) / 3600); ($half_life | tonumber))
+    }) |
+    # Calculate cumulative weights for selection
+    (map(.weight) | add) as $total |
+    if $total == 0 then .[0]
+    else
+      # Use random selection weighted by decay
+      ($rand | tonumber) as $r |
+      ($r * $total) as $pick |
+      reduce .[] as $item (
+        {sum: 0, selected: null};
+        if .selected != null then .
+        else
+          (.sum + $item.weight) as $new_sum |
+          if $new_sum >= $pick then {sum: $new_sum, selected: $item}
+          else {sum: $new_sum, selected: null} end
+        end
+      ) | .selected // .[0]
+    end
+  end |
+  if . then "\(.title)\n|||URL|||\(.url)" else null end
+' 2>/dev/null)
+
+if [[ -z "$selected" || "$selected" == "null" ]]; then
     echo '{"text": "⟳ No recent headlines", "class": "loading"}'
     exit 0
 fi
 
-# Decay-weighted random selection: newer headlines (lower index) are more likely
-# Using rand^1.5 for gentler decay - still favors newest but older items appear more often
-# ~61% chance from first half, ~35% from first quarter
-rand_float=$(awk 'BEGIN {srand(); r=rand(); print r^1.5}')
-index=$(awk -v r="$rand_float" -v c="$count" 'BEGIN {idx=int(r * c); if(idx>=c) idx=c-1; print idx}')
-
-# Get headline at decay-weighted index
-headline=$(echo "$response" | jq -r --arg idx "$index" '
-    [.items[] | select(.title != null and .title != "")]
-    | .[$idx | tonumber]
-    | (.origin.title // "Feed") + " | " + .title
-' 2>/dev/null)
-
-# Extract URL: HN -> comments, others -> article
-url=$(echo "$response" | jq -r --arg idx "$index" '
-    [.items[] | select(.title != null and .title != "")]
-    | .[$idx | tonumber]
-    | if (.origin.title // "") | contains("Hacker News") then
-        (.summary.content // "" |
-         if test("https://news\\.ycombinator\\.com/item\\?id=[0-9]+") then
-             (match("https://news\\.ycombinator\\.com/item\\?id=[0-9]+") | .string)
-         else
-             (.alternate[0].href // "")
-         end)
-      else
-        (.alternate[0].href // .canonical[0].href // "")
-      end
-' 2>/dev/null)
+headline=$(echo "$selected" | head -1)
+url=$(echo "$selected" | grep -oP '(?<=\|\|\|URL\|\|\|).*')
 
 # Store URL with headline for click verification
 # Format: headline|||url
