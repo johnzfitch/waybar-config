@@ -47,7 +47,7 @@ To get your FreshRSS auth token:
 
 ## Feed Ticker
 
-The feed ticker displays headlines from your FreshRSS reading list and rotates through them every 5 seconds.
+The feed ticker displays headlines from your FreshRSS reading list. It fetches fresh headlines directly from the FreshRSS API every 5 seconds, showing one headline at a time.
 
 ### Hover-Pause Feature
 

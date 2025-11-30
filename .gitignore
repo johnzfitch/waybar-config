@@ -1,6 +1,8 @@
 # Backup files
 *.backup
 *.backup*
+*.bak.*
+*-backup
 *~
 
 # Temporary files
