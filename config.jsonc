@@ -6,11 +6,13 @@
     "layer": "top",
     "position": "top",
     "spacing": 0,
+    "fixed-center": false,
     "height": 50,
     "modules-left": [
       "custom/omarchy",
       "hyprland/workspaces",
-      "custom/stealth-proxy"
+      "custom/stealth-proxy",
+      "custom/kgpg"
     ],
     "modules-center": [
       "custom/feed-ticker",
@@ -213,7 +215,16 @@
       "interval": 3,
       "on-click": "~/.config/waybar/stealth-proxy-status.sh toggle",
       "on-click-right": "~/.config/waybar/stealth-proxy-status.sh mode",
-      "format": "{}"
+      "format": "  {}  "
+    },
+    "custom/kgpg": {
+      "format": "  󰌋  ",
+      "on-click": "kgpg",
+      "tooltip-format": "KGpg - GnuPG Frontend"
+    },
+    "custom/left-spacer": {
+      "format": " ",
+      "tooltip": false
     }
   }
 ]

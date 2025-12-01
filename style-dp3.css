@@ -15,12 +15,26 @@
   padding-bottom: 0px;
 }
 
-.modules-left {
-  margin-left: 24px;
+box.modules-left {
+  padding-left: 20px;
+  padding-right: 40px;
 }
 
-.modules-right {
-  margin-right: 24px;
+box.modules-left > * {
+  margin: 0 12px;
+}
+
+box.modules-center {
+  padding: 0 20px;
+}
+
+box.modules-right {
+  padding-left: 40px;
+  padding-right: 20px;
+}
+
+box.modules-right > * {
+  margin: 0 12px;
 }
 
 #workspaces button {
@@ -45,6 +59,11 @@
   margin: 0 15px;
 }
 
+#custom-stealth-proxy,
+#custom-kgpg {
+  min-width: 20px;
+}
+
 #custom-mullvad.connected {
   color: #a6e3a1;
 }
@@ -55,11 +74,6 @@
 
 #custom-mullvad.connecting {
   color: #fab387;
-}
-
-#custom-stealth-proxy {
-  min-width: 12px;
-  margin-left: 20px;
 }
 
 #custom-stealth-proxy.proxy-on {
