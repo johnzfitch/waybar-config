@@ -1,7 +1,7 @@
 @import "../omarchy/current/theme/waybar.css";
 
 * {
-  background-color: @background;
+  background-color: transparent;
   color: @foreground;
 
   border: none;
@@ -11,21 +11,31 @@
   font-size: 16px;
 }
 
-box.modules-left {
+window#waybar {
+  background-color: @background-solid;
+}
+
+.modules-left,
+.modules-center,
+.modules-right {
+  background-color: transparent;
+}
+
+.modules-left {
   padding-left: 20px;
   padding-right: 40px;
 }
 
-box.modules-left > * {
+.modules-left > * {
   margin: 0 12px;
 }
 
-box.modules-right {
+.modules-right {
   padding-left: 40px;
   padding-right: 20px;
 }
 
-box.modules-right > * {
+.modules-right > * {
   margin: 0 12px;
 }
 

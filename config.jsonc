@@ -1,7 +1,7 @@
 [
   {
     "output": "DP-1",
-    "style": "/home/zack/.config/waybar/style-dp3.css",
+    "style": "style-dp3.css",
     "reload_style_on_change": true,
     "layer": "top",
     "position": "top",

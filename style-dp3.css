@@ -1,44 +1,55 @@
 @import "../omarchy/current/theme/waybar.css";
 
 * {
-  background-color: @background;
+  background-color: transparent;
   color: @foreground;
-
   border: none;
   border-radius: 0;
   min-height: 0;
   font-family: 'Hack Nerd Font';
   font-size: 16px;
-
-  /* Better vertical centering */
   padding-top: 0px;
   padding-bottom: 0px;
 }
 
-box.modules-left {
-  padding-left: 20px;
-  padding-right: 40px;
+window#waybar {
+  background-color: @background-solid;
 }
 
-box.modules-left > * {
+.modules-left,
+.modules-center,
+.modules-right {
+  background-color: transparent;
+}
+
+.modules-left {
+  margin-left: 20px;
+  margin-right: 40px;
+}
+
+.modules-left > * {
   margin: 0 12px;
 }
 
-box.modules-center {
+.modules-center {
   padding: 0 20px;
 }
 
-box.modules-right {
-  padding-left: 40px;
-  padding-right: 20px;
+.modules-right {
+  margin-left: 40px;
+  margin-right: 20px;
 }
 
-box.modules-right > * {
+.modules-right > * {
   margin: 0 12px;
 }
 
 #workspaces button {
   all: initial;
+  background-color: transparent;
+  color: @foreground;
+  font-family: 'Hack Nerd Font';
+  font-size: 16px;
   padding: 0 6px;
   margin: 0 1.5px;
   min-width: 25px;
